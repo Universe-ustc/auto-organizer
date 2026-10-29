@@ -2,13 +2,23 @@
 
 按主题整理本地文件夹的 Agent Skill。脚本负责扫描、移动、报告和回滚；分类方案由 Agent 根据文件名和正文来写。
 
-这是标准的 Agent Skill：目录里有 `SKILL.md` 即可。Cursor、Claude Code、Codex、Copilot CLI、Gemini CLI 以及其它会加载技能目录的 Agent 都能用。
+这是标准的 Agent Skill：把内层 `auto-organizer/` 装进技能目录即可。Cursor、Claude Code、Codex、Copilot CLI、Gemini CLI 以及其它会加载 `SKILL.md` 的 Agent 都能用。
 
-本 README 和 `tests/` 只给人看、给开发者跑回归。技能加载器默认只注入 `SKILL.md`；安装时也不要把这两样拷进技能目录，对话里请 `@SKILL.md`，不要 `@` 整个仓库。
+本仓库分两层，和 [anthropics/skills](https://github.com/anthropics/skills) 一样：仓库根给人看，技能包给 Agent 用。
+
+```text
+auto-organizer/                 GitHub 仓库
+  README.md
+  tests/
+  auto-organizer/               技能包（只装这一层）
+    SKILL.md
+    references/
+    scripts/
+```
 
 ## 安装
 
-只复制技能本体，**不要**复制 `README.md`、`tests/`、`.git/`：
+把**内层** `auto-organizer/` 复制到当前 Agent 的技能目录，并保持文件夹名为 `auto-organizer`。不要复制仓库根下的 `README.md`、`tests/`、`.git/`。
 
 ```text
 <skills>/auto-organizer/
@@ -26,19 +36,15 @@
 | Claude Code | `~/.claude/skills/` |
 | Cursor | `~/.cursor/skills/` |
 
-也可以放进当前项目，例如 `.agents/skills/auto-organizer/`、`.claude/skills/auto-organizer/`、`.cursor/skills/auto-organizer/`。仓库已经在工作区里时，对 Agent `@SKILL.md` 即可。
+也可以放进当前项目，例如 `.agents/skills/auto-organizer/`。仓库在工作区里时，对 Agent `@auto-organizer/SKILL.md`。
 
 Windows 示例（写入跨工具共用目录）：
 
 ```powershell
-$dest = "$env:USERPROFILE\.agents\skills\auto-organizer"
-New-Item -ItemType Directory -Force $dest | Out-Null
-Copy-Item ".\SKILL.md" $dest
-Copy-Item ".\references" $dest -Recurse
-Copy-Item ".\scripts" $dest -Recurse
+Copy-Item -Recurse ".\auto-organizer" "$env:USERPROFILE\.agents\skills\auto-organizer"
 ```
 
-装好后，对 Agent 说「帮我整理这个文件夹」并给出路径即可。
+装好后，对 Agent 说「帮我整理这个文件夹」并给出路径即可。加载器会读 `<skills>/auto-organizer/SKILL.md`（`name` 必须与文件夹名一致）。
 
 ## 使用
 
@@ -66,26 +72,8 @@ Copy-Item ".\scripts" $dest -Recurse
 
 ## 测试
 
-给维护者用，不是技能流程的一部分：
+给维护者用，在仓库根目录运行：
 
 ```powershell
 python tests/test_auto_organizer.py -v
-```
-
-## 目录
-
-技能本体（给 Agent 用）：
-
-```text
-SKILL.md                 Agent 指令
-references/分类规则.md   分类细则
-scripts/organize.py      扫描 / 预览 / 执行 / 校验 / 回滚
-scripts/extract_text.py  多格式正文抽取
-```
-
-仓库里另外还有（给人用，不要放进技能目录）：
-
-```text
-README.md                GitHub / 安装说明
-tests/                   回归测试
 ```

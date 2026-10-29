@@ -10,8 +10,6 @@ description: Use when the user asks to organize, classify, sort, or archive a lo
 
 > 下文 `scripts/...` 均相对于本 SKILL.md 所在目录。命令统一用 `python`。
 > 如果当前工作目录不是本 skill 目录，执行前先把脚本路径替换为绝对路径。
->
-> **只使用本文件、`references/`、`scripts/`。** 不要读取 `README.md`、`tests/`、`.git/`，它们不是工作流的一部分。
 
 ## 适用 / 不适用
 
@@ -180,11 +178,9 @@ python scripts/organize.py rollback "<根目录>" --journal latest --apply  # �
 - 漏文件：没进 `moves` 也没进 `unmatched`。
 - 发现 SHA-256 相同却删除副本，或把 keep 和 extras 都丢进主题类还不标明。
 - 对已经整理过的编号目录再搬一次，除非用户明确要求重新分类。
-- 去读 `README.md` 或运行 `tests/`。整理流程只跟本文件、`references/`、`scripts/` 有关。
 
 ## 资源
 
 - `scripts/organize.py`：scan / apply（默认 dry-run）/ verify / rollback / 报告 / journal
 - `scripts/extract_text.py`：docx / pptx / xlsx / pdf / 文本 / 图片（可选 Tesseract OCR）/ zip 清单抽取
 - `references/分类规则.md`：判定优先级、类别设计、边界情况
-- 不要打开 `README.md` 或 `tests/`

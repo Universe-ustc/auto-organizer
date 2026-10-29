@@ -15,7 +15,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ROOT / "scripts"
+SKILL = ROOT / "auto-organizer"
+SCRIPTS = SKILL / "scripts"
 
 
 def load_module(name: str, path: Path):
