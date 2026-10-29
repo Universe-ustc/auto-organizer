@@ -2,7 +2,7 @@
 
 按主题整理本地文件夹的 Agent Skill。脚本负责扫描、移动、报告和回滚；分类方案由 Agent 根据文件名和正文来写。
 
-这是标准的 Agent Skill：目录里有 `SKILL.md` 即可。Cursor、Claude Code、Codex、Copilot CLI、Gemini CLI 以及其它会加载技能目录的 Agent 都能用。人类读本 README 做安装；Agent 只读 `SKILL.md`。
+这是标准的 Agent Skill：目录里有 `SKILL.md` 即可。Cursor、Claude Code、Codex、Copilot CLI、Gemini CLI 以及其它会加载技能目录的 Agent 都能用。
 
 ## 安装
 
