@@ -4,9 +4,11 @@
 
 这是标准的 Agent Skill：目录里有 `SKILL.md` 即可。Cursor、Claude Code、Codex、Copilot CLI、Gemini CLI 以及其它会加载技能目录的 Agent 都能用。
 
+本 README 和 `tests/` 只给人看、给开发者跑回归。技能加载器默认只注入 `SKILL.md`；安装时也不要把这两样拷进技能目录，对话里请 `@SKILL.md`，不要 `@` 整个仓库。
+
 ## 安装
 
-把整个仓库（或克隆后的目录）复制到**当前 Agent 会扫描的技能目录**，并保持文件夹名为 `auto-organizer`：
+只复制技能本体，**不要**复制 `README.md`、`tests/`、`.git/`：
 
 ```text
 <skills>/auto-organizer/
@@ -24,12 +26,16 @@
 | Claude Code | `~/.claude/skills/` |
 | Cursor | `~/.cursor/skills/` |
 
-也可以放进当前项目，例如 `.agents/skills/auto-organizer/`、`.claude/skills/auto-organizer/`、`.cursor/skills/auto-organizer/`。仓库已经在工作区里时，直接在对话里 `@` 该目录即可，不必先复制。
+也可以放进当前项目，例如 `.agents/skills/auto-organizer/`、`.claude/skills/auto-organizer/`、`.cursor/skills/auto-organizer/`。仓库已经在工作区里时，对 Agent `@SKILL.md` 即可。
 
 Windows 示例（写入跨工具共用目录）：
 
 ```powershell
-Copy-Item -Recurse ".\auto-organizer" "$env:USERPROFILE\.agents\skills\auto-organizer"
+$dest = "$env:USERPROFILE\.agents\skills\auto-organizer"
+New-Item -ItemType Directory -Force $dest | Out-Null
+Copy-Item ".\SKILL.md" $dest
+Copy-Item ".\references" $dest -Recurse
+Copy-Item ".\scripts" $dest -Recurse
 ```
 
 装好后，对 Agent 说「帮我整理这个文件夹」并给出路径即可。
@@ -60,16 +66,26 @@ Copy-Item -Recurse ".\auto-organizer" "$env:USERPROFILE\.agents\skills\auto-orga
 
 ## 测试
 
+给维护者用，不是技能流程的一部分：
+
 ```powershell
 python tests/test_auto_organizer.py -v
 ```
 
 ## 目录
 
+技能本体（给 Agent 用）：
+
 ```text
 SKILL.md                 Agent 指令
 references/分类规则.md   分类细则
 scripts/organize.py      扫描 / 预览 / 执行 / 校验 / 回滚
 scripts/extract_text.py  多格式正文抽取
+```
+
+仓库里另外还有（给人用，不要放进技能目录）：
+
+```text
+README.md                GitHub / 安装说明
 tests/                   回归测试
 ```
